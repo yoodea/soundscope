@@ -1,0 +1,11 @@
+[
+    {
+      "id": 1,
+      "albumId": 1,
+      "userId": 101,
+      "rating": 5,
+      "headline": "Timeless",
+      "body": "Gorgeous production and storytelling.",
+      "createdAt": "2025-09-20T10:00:00Z"
+    }
+  ]

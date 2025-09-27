@@ -1,0 +1,12 @@
+[
+    {
+      "id": 1,
+      "title": "Blonde",
+      "artist": "Frank Ocean",
+      "genre": "R&B",
+      "year": 2016,
+      "avgRating": 4.7,
+      "ratingsCount": 2350,
+      "coverUrl": "https://example.com/blonde.jpg"
+    }
+  ]
