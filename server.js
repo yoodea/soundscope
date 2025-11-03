@@ -1,4 +1,3 @@
-// server.js — Phase 3 (MongoDB + Mongoose)
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
@@ -6,20 +5,17 @@ const { body, validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 const connectDB = require("./shared/middlewares/connect-db");
 
-// Mongo models
 const Album = require("./modules/albums/album.model");
 const Review = require("./modules/reviews/review.model");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// -------------------- App-level middlewares --------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(connectDB); // connect once, then no-op
+app.use(connectDB);
 
-// -------------------- Validators (same rules you used) --------------------
 const albumCreateRules = [
   body("title").isString().trim().isLength({ min: 1 }).withMessage("title is required"),
   body("artist").isString().trim().isLength({ min: 1 }).withMessage("artist is required"),
@@ -46,10 +42,8 @@ const reviewUpdateRules = [
   body("body").optional().isString().isLength({ max: 2000 }),
 ];
 
-// -------------------- Helper --------------------
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-// -------------------- Albums: list (search/filter/sort/paginate) --------------------
 app.get("/albums", async (req, res, next) => {
   try {
     const { query, genre, year, sortBy, page = 1, limit = 12 } = req.query;
@@ -80,7 +74,6 @@ app.get("/albums", async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Albums: get by id --------------------
 app.get("/albums/:id", async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Album not found" });
@@ -90,7 +83,6 @@ app.get("/albums/:id", async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Albums: create --------------------
 app.post("/albums", albumCreateRules, async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -107,7 +99,6 @@ app.post("/albums", albumCreateRules, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Albums: update --------------------
 app.put("/albums/:id", albumUpdateRules, async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Album not found" });
@@ -125,7 +116,6 @@ app.put("/albums/:id", albumUpdateRules, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Albums: delete (also remove its reviews) --------------------
 app.delete("/albums/:id", async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Album not found" });
@@ -133,12 +123,11 @@ app.delete("/albums/:id", async (req, res, next) => {
     const album = await Album.findByIdAndDelete(req.params.id);
     if (!album) return res.status(404).json({ error: "Album not found" });
 
-    await Review.deleteMany({ albumId: album._id }); // cascade delete
+    await Review.deleteMany({ albumId: album._id }); 
     res.status(200).json({ ok: true });
   } catch (e) { next(e); }
 });
 
-// -------------------- Reviews: list for an album --------------------
 app.get("/albums/:id/reviews", async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Album not found" });
@@ -147,7 +136,6 @@ app.get("/albums/:id/reviews", async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Reviews: create for an album --------------------
 app.post("/albums/:id/reviews", reviewCreateRules, async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Album not found" });
@@ -166,7 +154,6 @@ app.post("/albums/:id/reviews", reviewCreateRules, async (req, res, next) => {
       body: req.body.body || ""
     });
 
-    // recompute album metrics
     const agg = await Review.aggregate([
       { $match: { albumId: album._id } },
       { $group: { _id: "$albumId", avg: { $avg: "$rating" }, count: { $sum: 1 } } }
@@ -180,7 +167,6 @@ app.post("/albums/:id/reviews", reviewCreateRules, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Reviews: update by review id --------------------
 app.put("/reviews/:id", reviewUpdateRules, async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Review not found" });
@@ -195,7 +181,6 @@ app.put("/reviews/:id", reviewUpdateRules, async (req, res, next) => {
     );
     if (!review) return res.status(404).json({ error: "Review not found" });
 
-    // recompute album metrics
     const albumId = review.albumId;
     const agg = await Review.aggregate([
       { $match: { albumId } },
@@ -210,7 +195,6 @@ app.put("/reviews/:id", reviewUpdateRules, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Reviews: delete by review id --------------------
 app.delete("/reviews/:id", async (req, res, next) => {
   try {
     if (!isValidObjectId(req.params.id)) return res.status(404).json({ error: "Review not found" });
@@ -218,7 +202,6 @@ app.delete("/reviews/:id", async (req, res, next) => {
     const review = await Review.findByIdAndDelete(req.params.id);
     if (!review) return res.status(404).json({ error: "Review not found" });
 
-    // recompute album metrics
     const albumId = review.albumId;
     const agg = await Review.aggregate([
       { $match: { albumId } },
@@ -233,17 +216,14 @@ app.delete("/reviews/:id", async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// -------------------- Health --------------------
 app.get("/api", (req, res) => res.json({ ok: true, service: "SoundScope API (MongoDB)" }));
 
-// -------------------- 404 + Error handlers --------------------
 app.use((req, res) => res.status(404).json({ error: `Route ${req.method} ${req.path} not found` }));
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-// -------------------- Start --------------------
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
