@@ -1,12 +1,22 @@
 [
-    {
-      "id": 1,
-      "title": "Blonde",
-      "artist": "Frank Ocean",
-      "genre": "R&B",
-      "year": 2016,
-      "avgRating": 4.7,
-      "ratingsCount": 2350,
-      "coverUrl": "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg"
-    }
-  ]
+  {
+    "id": 1,
+    "title": "Blonde",
+    "artist": "Frank Ocean",
+    "genre": "Alternative R&B",
+    "year": 2017,
+    "avgRating": 4.7,
+    "ratingsCount": 2350,
+    "coverUrl": "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "UTOPIA",
+    "artist": "Travis Scott",
+    "genre": "Hip-Hop",
+    "year": 2023,
+    "coverUrl": "utopia.jpg",
+    "avgRating": null,
+    "ratingsCount": 0
+  }
+]

@@ -46,3 +46,14 @@ DELETE /reviews/:id            - delete review
 - Data persistence using read/write operations on JSON files
 - Tested all endpoints using Postman and curl
 - Organized routes logically and ensured clear API responses
+
+
+# SoundScope — Music Reviews & Ratings (Phase 3)
+
+## Phase 3 Features Implemented
+
+- MongoDB Atlas integration with dotenv and connect-db middleware
+- Mongoose models for Album and Review with schema validations
+- Replaced file storage with Mongoose CRUD
+- Kept search, sort, pagination via MongoDB queries
+- Tested all routes in Postman; verified status codes & validation
