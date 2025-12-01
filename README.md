@@ -57,3 +57,26 @@ DELETE /reviews/:id            - delete review
 - Replaced file storage with Mongoose CRUD
 - Kept search, sort, pagination via MongoDB queries
 - Tested all routes in Postman; verified status codes & validation
+
+
+# SoundScope — Music Reviews & Ratings (Phase 4)
+
+## Phase 4 Features Implemented
+
+- Added full React frontend (Vite + React)
+- Implemented React Router for navigation between pages
+- Built Albums page with:
+- Album listing from backend API
+- Create Album form with client-side validation
+- Delete album functionality
+- Success/error messages for UI feedback
+- Built Album Detail page with:
+- Album info loading from API
+- Review list with timestamps
+- Add Review form with validation (rating, headline, body)
+- Automatic refresh of reviews and album rating after submission
+- Created Axios API service with environment-based base URL
+- Enabled CORS on backend for frontend communication
+- Removed Phase 1 static frontend (public/index.html & app.js)
+- Connected React frontend to MongoDB-backed Express API (full MERN flow)
+- Tested all CRUD operations through the UI and verified database updates
