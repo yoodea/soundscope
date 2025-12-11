@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   --bg-main: #05060a;
   --bg-elevated: #0d0f18;
@@ -37,7 +43,6 @@ body {
 }
 
 .rzt-header-inner {
-  max-width: 1180px;
   margin: 0 auto;
   padding: 10px 18px;
   display: flex;
@@ -148,7 +153,6 @@ body {
 
 .rzt-main {
   flex: 1;
-  max-width: 1180px;
   width: 100%;
   margin: 0 auto;
   padding: 18px;
@@ -161,7 +165,6 @@ body {
 }
 
 .rzt-footer-inner {
-  max-width: 1180px;
   margin: 0 auto;
   padding: 0 18px;
   display: flex;
