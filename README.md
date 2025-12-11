@@ -80,3 +80,40 @@ DELETE /reviews/:id            - delete review
 - Removed Phase 1 static frontend (public/index.html & app.js)
 - Connected React frontend to MongoDB-backed Express API (full MERN flow)
 - Tested all CRUD operations through the UI and verified database updates
+
+# SoundScope — Music Reviews & Ratings (Phase 5)
+
+## Phase 5 Features Implemented
+
+### Authentication & MFA
+- Added user registration and login routes
+- Implemented secure password hashing using bcrypt
+- Added email-based One-Time Password (OTP) MFA flow
+- Generated OTP on login attempt and sent it to the user's email
+- Stored OTP temporarily on the backend with expiry time
+- Added `/auth/verify-otp` route to finalize login
+- Only issued JWT token after successful OTP verification
+- Implemented token expiration and error handling for invalid/expired tokens
+
+### Authorization (RBAC)
+- Stored user role in the User model (`user`, `admin`)
+- Created reusable authorization middlewares: `requireAuth` and `requireRole(...)`
+- Protected admin-only routes:
+  - Create album
+  - Update album
+  - Delete album
+  - Update review
+  - Delete review
+- Left browsing albums and posting reviews available to authenticated users
+- Returned proper 401/403 responses for missing or insufficient permissions
+
+### Frontend Authentication Flow
+- Added Login page (email + password)
+- After login, redirected user to OTP verification screen
+- Added OTP verification page that exchanges OTP for a JWT token
+- Stored JWT and role in `localStorage`
+- Attached JWT to protected API calls using an Axios interceptor
+- Implemented logout to clear token, role, and pending email and redirect to login
+- Updated UI to:
+  - Only show admin actions (create/delete album) when role is `admin`
+  - Require login for posting reviews
