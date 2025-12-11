@@ -142,7 +142,6 @@ export default function AlbumsPage() {
             <span className="rzt-hero-pill">Album ratings and written reviews</span>
             <span className="rzt-hero-pill">Sort by score and year</span>
             <span className="rzt-hero-pill">Filter by genre</span>
-            <span className="rzt-hero-pill">No ads – academic project</span>
           </div>
           <div className="rzt-stats-row">
             <div className="rzt-stat-card">
